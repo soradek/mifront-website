@@ -15,7 +15,8 @@ export const site = {
     city: 'Inowrocław',
     region: 'kujawsko-pomorskie',
   },
-  mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Staropozna%C5%84ska+178%2C+88-100+Inowroc%C5%82aw',
+  // Na stronie pokazujemy tylko obszar; pełny adres jest wyłącznie w polityce prywatności (wymóg RODO).
+  area: 'Inowrocław i okolice',
   nip: '5561219454',
   regon: '381842382',
   since: 2018,
@@ -30,7 +31,7 @@ export const faq = [
   },
   {
     q: 'Gdzie pracujecie?',
-    a: 'Pracownia jest w Inowrocławiu, przy ul. Staropoznańskiej 178. Wykonujemy meble dla klientów z Inowrocławia i okolic. Mieszkasz dalej? Zadzwoń i zapytaj o swoją miejscowość.',
+    a: 'Wykonujemy meble dla klientów z Inowrocławia i okolic. Mieszkasz dalej? Zadzwoń i zapytaj o swoją miejscowość.',
   },
   {
     q: 'Jakie fronty możecie wykonać?',

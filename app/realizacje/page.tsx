@@ -11,14 +11,13 @@ export const metadata: Metadata = {
 };
 
 export default function RealizacjePage() {
-  const count = projects.reduce((n, p) => n + p.photos.length, 0);
   return (
     <div className="gallery-page">
       <header className="gallery-page__head">
         <h1 className="section-title section-title--xl">Realizacje</h1>
         <p>
-          {count} zdjęć z mieszkań i domów naszych klientów. Bez wizualizacji i stocków, tylko meble po montażu. Podoba
-          Ci się któraś? Zadzwoń: <a href={site.phoneHref}>{site.phone}</a>.
+          Meble wykonane w mieszkaniach i domach naszych klientów. Podoba Ci się któraś realizacja? Zadzwoń:{' '}
+          <a href={site.phoneHref}>{site.phone}</a>.
         </p>
       </header>
       <Gallery projects={projects} categories={categories} />

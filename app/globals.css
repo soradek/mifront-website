@@ -1250,6 +1250,10 @@ p {
   .hero__actions {
     margin-top: 1.5rem;
     display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .hero__actions .btn:first-child {
+    grid-column: 1 / -1;
   }
   .hero__actions .btn {
     justify-content: center;
@@ -1366,7 +1370,7 @@ p {
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   border-top: 1px solid var(--line);
 }
 .facts__list li {
@@ -1393,15 +1397,16 @@ p {
 }
 @media (max-width: 860px) {
   .facts__list {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
   }
-  .facts__list li:nth-child(3) {
-    padding-left: 0;
+  .facts__list li,
+  .facts__list li + li {
+    padding: 1.1rem 0;
     border-left: 0;
-  }
-  .facts__list li:nth-child(n + 3) {
-    margin-top: 1.25rem;
-    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    align-items: baseline;
+    gap: 1rem;
   }
 }
 
@@ -1435,21 +1440,22 @@ p {
 .faq summary::-webkit-details-marker {
   display: none;
 }
+/* Plus rysowany dwiema liniami, bo znak z fontu nie siedzi w środku ramki. */
 .faq summary::after {
-  content: '+';
+  content: '';
   flex: none;
   width: 2rem;
   height: 2rem;
-  display: grid;
-  place-items: center;
+  box-sizing: border-box;
   border: 1px solid var(--ink-2);
-  font-weight: 400;
-  font-size: 1.2rem;
+  background:
+    linear-gradient(currentColor, currentColor) center / 12px 1.5px no-repeat,
+    linear-gradient(currentColor, currentColor) center / 1.5px 12px no-repeat;
   transition: transform 0.3s var(--ease), background-color 0.3s var(--ease);
 }
 .faq details[open] summary::after {
   transform: rotate(45deg);
-  background: var(--teal);
+  background-color: var(--teal);
   border-color: var(--teal);
 }
 .faq details p {

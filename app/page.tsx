@@ -2,7 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Measure from '@/components/Measure';
 import ContactForm from '@/components/ContactForm';
-import { PhoneIcon } from '@/components/Header';
+import { FacebookIcon, PhoneIcon } from '@/components/Header';
 import { faq, offer, site, steps } from '@/lib/site';
 import { projects } from '@/data/realizacje';
 
@@ -18,7 +18,6 @@ export default function Home() {
   const featured = featuredSlugs
     .map((slug) => projects.find((p) => p.slug === slug))
     .filter((p): p is (typeof projects)[number] => Boolean(p));
-  const photoCount = projects.reduce((n, p) => n + p.photos.length, 0);
   const faqLd = {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
@@ -48,6 +47,10 @@ export default function Home() {
             <Link href="/realizacje" className="btn btn--ghost">
               Zobacz realizacje
             </Link>
+            <a href={site.facebook} className="btn btn--ghost btn--fb" target="_blank" rel="noopener noreferrer">
+              <FacebookIcon />
+              Facebook
+            </a>
           </div>
         </div>
         <figure className="hero__photo">
@@ -74,17 +77,11 @@ export default function Home() {
           </li>
           <li data-reveal style={{ '--d': '80ms' } as React.CSSProperties}>
             <strong>Inowrocław</strong>
-            <span>własna pracownia, {site.address.street}</span>
+            <span>i okolice, z dojazdem na pomiar i montaż</span>
           </li>
           <li data-reveal style={{ '--d': '160ms' } as React.CSSProperties}>
             <strong>Jeden wykonawca</strong>
             <span>pomiar, projekt, produkcja i montaż</span>
-          </li>
-          <li data-reveal style={{ '--d': '240ms' } as React.CSSProperties}>
-            <strong>{photoCount} zdjęć</strong>
-            <span>
-              <Link href="/realizacje">prawdziwych realizacji</Link>, bez wizualizacji
-            </span>
           </li>
         </ul>
       </section>
@@ -174,19 +171,13 @@ export default function Home() {
           <a href={`mailto:${site.email}`} className="contact__mail">
             {site.email}
           </a>
-          <address className="contact__address">
-            {site.legalName}
+          <p className="contact__address">
+            {site.area}
             <br />
-            {site.address.street}, {site.address.postalCode} {site.address.city}
-            <br />
-            <a href={site.mapsUrl} target="_blank" rel="noopener noreferrer">
-              Pokaż na mapie
-            </a>
-            {' · '}
             <a href={site.facebook} target="_blank" rel="noopener noreferrer">
-              Facebook
+              MIFRONT na Facebooku
             </a>
-          </address>
+          </p>
         </div>
         <div data-reveal style={{ '--d': '120ms' } as React.CSSProperties}>
           <ContactForm />

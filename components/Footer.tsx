@@ -17,14 +17,8 @@ export default function Footer() {
             <dd><a href={`mailto:${site.email}`}>{site.email}</a></dd>
           </div>
           <div>
-            <dt>Pracownia</dt>
-            <dd>
-              <a href={site.mapsUrl} target="_blank" rel="noopener noreferrer">
-                {site.address.street}
-                <br />
-                {site.address.postalCode} {site.address.city}
-              </a>
-            </dd>
+            <dt>Obszar</dt>
+            <dd>{site.area}</dd>
           </div>
           <div>
             <dt>Facebook</dt>

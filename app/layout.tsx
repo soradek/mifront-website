@@ -64,14 +64,11 @@ const jsonLd = {
   taxID: site.nip,
   address: {
     '@type': 'PostalAddress',
-    streetAddress: site.address.street.replace('ul. ', ''),
-    postalCode: site.address.postalCode,
     addressLocality: site.address.city,
     addressRegion: site.address.region,
     addressCountry: 'PL',
   },
   areaServed: { '@type': 'City', name: site.address.city },
-  hasMap: site.mapsUrl,
   sameAs: [site.facebook],
   makesOffer: ['Kuchnie na wymiar', 'Szafy przesuwne', 'Garderoby', 'Meble łazienkowe', 'Meble pokojowe', 'Wymiana okuć meblowych'].map(
     (name) => ({ '@type': 'Offer', itemOffered: { '@type': 'Service', name } }),
