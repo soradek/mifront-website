@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
+import ZoomImage from '@/components/ZoomImage';
 import type { Category, Photo, Project } from '@/data/realizacje';
 
 type Props = { projects: Project[]; categories: { id: Category; label: string }[] };
@@ -87,17 +88,7 @@ export default function Gallery({ projects, categories }: Props) {
       <dialog ref={dialog} className="lightbox" aria-label={open ? open.project.title : 'Podgląd zdjęcia'}>
         {open && current && (
           <>
-            <div className="lightbox__img">
-              <Image
-                key={current.src}
-                src={current.src}
-                alt={current.alt}
-                width={current.width}
-                height={current.height}
-                sizes="100vw"
-                quality={80}
-              />
-            </div>
+            <ZoomImage photo={current} onSwipe={step} />
             <div className="lightbox__bar">
               <span>
                 {open.project.title} · {open.index + 1}/{open.project.photos.length}

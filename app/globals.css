@@ -276,9 +276,12 @@ p {
   font-family: var(--f-display);
   font-weight: 700;
   text-transform: uppercase;
-  font-size: clamp(3.6rem, 2rem + 8vw, 8.5rem);
-  line-height: 0.88;
+  font-size: clamp(3.2rem, 1.6rem + 7vw, 7.5rem);
+  line-height: 0.9;
   letter-spacing: -0.015em;
+}
+.hero__line {
+  display: block;
 }
 .hero__accent {
   /* Turkus z logo przyciemniony do kontrastu 3:1 dla dużego tekstu. */
@@ -487,6 +490,9 @@ p {
   .works__item--5 {
     grid-column: auto;
     grid-row: auto;
+  }
+  .works__item--4 {
+    grid-column: 1 / -1;
   }
   .works__item--5 {
     display: none;
@@ -921,24 +927,74 @@ p {
 }
 .lightbox[open] {
   display: grid;
-  grid-template-rows: 1fr auto;
+  grid-template-rows: minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1fr);
+  overflow: hidden;
 }
 .lightbox::backdrop {
   background: oklch(0.16 0.005 230 / 0.9);
 }
-.lightbox__img {
+.zoom {
+  position: relative;
   min-height: 0;
-  display: grid;
-  place-items: center;
-  padding: 1rem;
 }
-.lightbox__img img {
-  max-height: 100%;
-  width: auto;
+.zoom__stage {
+  position: absolute;
+  inset: 0.75rem;
+  overflow: hidden;
+  touch-action: none;
+  cursor: zoom-in;
+  user-select: none;
+}
+.zoom__stage.is-zoomed {
+  cursor: grab;
+}
+.zoom__stage.is-zoomed:active {
+  cursor: grabbing;
+}
+.zoom__layer {
+  position: absolute;
+  inset: 0;
+  transform-origin: 0 0;
+  will-change: transform;
+}
+.zoom__layer img {
   object-fit: contain;
+  pointer-events: none;
   animation: fade 0.35s var(--ease);
 }
+.zoom__controls {
+  position: absolute;
+  right: var(--gutter);
+  bottom: 1.25rem;
+  display: flex;
+  background: oklch(0.16 0.005 230 / 0.8);
+  border: 1px solid oklch(0.5 0.006 230);
+}
+.zoom__controls button {
+  min-width: 2.75rem;
+  height: 2.75rem;
+  font: 500 1.15rem var(--f-body);
+  background: transparent;
+  color: var(--on-dark);
+  border: 0;
+  cursor: pointer;
+}
+.zoom__controls .zoom__level {
+  min-width: 4rem;
+  font-size: 0.875rem;
+  font-variant-numeric: tabular-nums;
+}
+.zoom__controls button:disabled {
+  color: oklch(0.55 0.006 230);
+  cursor: default;
+}
+.zoom__controls button:not(:disabled):hover {
+  background: var(--teal);
+  color: var(--graphite);
+}
 .lightbox__bar {
+  min-width: 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -998,4 +1054,285 @@ p {
   font-size: clamp(6rem, 20vw, 12rem);
   line-height: 0.8;
   color: var(--teal);
+}
+
+/* ---------- motion: wejście hero ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  .hero__kicker,
+  .hero__line,
+  .hero__lead,
+  .hero__actions {
+    animation: rise 0.9s var(--ease) both;
+  }
+  .hero__line:nth-child(1) { animation-delay: 0.05s; }
+  .hero__line:nth-child(2) { animation-delay: 0.13s; }
+  .hero__line:nth-child(3) { animation-delay: 0.21s; }
+  .hero__line:nth-child(4) { animation-delay: 0.29s; }
+  .hero__lead { animation-delay: 0.42s; }
+  .hero__actions { animation-delay: 0.52s; }
+  .hero__photo .measure__line {
+    animation: draw 1.1s 0.5s var(--ease) both;
+  }
+  .hero__photo .measure--vertical .measure__line {
+    animation-name: draw-y;
+  }
+  .hero__photo .measure__label {
+    animation: fade 0.6s 1.1s var(--ease) both;
+  }
+}
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(0.6em);
+  }
+}
+@keyframes draw {
+  from { transform: scaleX(0); }
+}
+@keyframes draw-y {
+  from { transform: scaleY(0); }
+}
+
+/* ---------- motion: przewijanie (klasa .js ustawiana inline, .is-in przez Reveal) ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  .js [data-reveal] {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.9s var(--ease), transform 0.9s var(--ease);
+    transition-delay: var(--d, 0ms);
+  }
+  .js [data-reveal].is-in {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Zdjęcia odsłaniane jak kurtyna, z lekkim oddaleniem. Przycinamy link w środku,
+     żeby obserwowany element pozostał widoczny dla IntersectionObservera i lazy-loadu. */
+  .js [data-reveal='curtain'] {
+    opacity: 1;
+    transform: none;
+  }
+  .js [data-reveal='curtain'] > a {
+    clip-path: inset(100% 0 0 0);
+    transition: clip-path 1.1s var(--ease);
+    transition-delay: var(--d, 0ms);
+  }
+  .js [data-reveal='curtain'] img {
+    transform: scale(1.12);
+    transition: transform 1.6s var(--ease);
+    transition-delay: var(--d, 0ms);
+  }
+  .js [data-reveal='curtain'].is-in > a {
+    clip-path: inset(0 0 0 0);
+  }
+  .js [data-reveal='curtain'].is-in img {
+    transform: none;
+  }
+  .js [data-reveal='curtain'].is-in a:hover img {
+    transform: scale(1.04);
+    transition-delay: 0ms;
+  }
+
+  /* Oś procesu rysuje się jak linia wymiarowa, kroki pojawiają się po kolei. */
+  .js [data-reveal='line'] {
+    opacity: 1;
+    transform: none;
+  }
+  .js [data-reveal='line']::before {
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 1.4s var(--ease);
+  }
+  .js [data-reveal='line'] li {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s var(--ease), transform 0.8s var(--ease);
+    transition-delay: var(--d, 0ms);
+  }
+  .js [data-reveal='line'].is-in::before {
+    transform: none;
+  }
+  .js [data-reveal='line'].is-in li {
+    opacity: 1;
+    transform: none;
+  }
+  @media (max-width: 860px) {
+    .js [data-reveal='line']::before {
+      transform: scaleY(0);
+      transform-origin: top;
+    }
+  }
+}
+
+/* ---------- mobile ---------- */
+.mbar {
+  display: none;
+}
+@media (max-width: 760px) {
+  body {
+    padding-bottom: calc(4.25rem + env(safe-area-inset-bottom));
+  }
+  .mbar {
+    position: fixed;
+    z-index: 60;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1.3fr;
+    padding-bottom: env(safe-area-inset-bottom);
+    background: var(--paper);
+    border-top: 1px solid var(--line);
+    box-shadow: 0 -6px 20px oklch(0.3 0.01 230 / 0.06);
+  }
+  .mbar a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    min-height: 3.75rem;
+    color: var(--ink);
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .mbar a + a {
+    border-left: 1px solid var(--line);
+  }
+  .mbar .mbar__call {
+    background: var(--teal);
+    color: var(--graphite);
+    border-left: 0;
+  }
+
+  .header__inner {
+    padding-block: 0.65rem;
+  }
+  .header__phone {
+    display: none;
+  }
+  .header__logo img {
+    width: 170px;
+  }
+
+  .hero {
+    padding-top: 1.75rem;
+    gap: 2rem;
+  }
+  .hero__kicker {
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+  }
+  .hero__lead {
+    margin-top: 1.25rem;
+    font-size: 1.05rem;
+  }
+  .hero__actions {
+    margin-top: 1.5rem;
+    display: grid;
+  }
+  .hero__actions .btn {
+    justify-content: center;
+    padding-block: 1.05rem;
+  }
+  .hero__photo {
+    grid-template-columns: 1fr;
+  }
+  .hero__photo .measure--vertical {
+    display: none;
+  }
+  .hero__photo > .measure:last-child {
+    grid-column: 1;
+  }
+  .hero__frame {
+    aspect-ratio: 4 / 4.6;
+  }
+
+  .offer {
+    padding-block: 3.5rem;
+    gap: 1.75rem;
+  }
+  .offer__list li {
+    grid-template-columns: 2.25rem 1fr;
+    column-gap: 0.75rem;
+    padding: 1.25rem 0;
+  }
+  .offer__num {
+    font-size: 1.2rem;
+    padding-top: 0.2rem;
+  }
+  .offer__list h3 {
+    font-size: 1.45rem;
+  }
+  .offer__list p {
+    font-size: 0.98rem;
+  }
+
+  .works__head {
+    margin-bottom: 1.25rem;
+  }
+  .process__steps p {
+    max-width: none;
+  }
+  .contact {
+    padding-block: 3.5rem;
+  }
+  .contact__phone {
+    font-size: 3rem;
+  }
+  .form {
+    margin-inline: calc(var(--gutter) * -1);
+  }
+  .form .btn {
+    justify-self: stretch;
+    justify-content: center;
+    padding-block: 1.05rem;
+  }
+
+  .gallery-page__head p {
+    font-size: 1rem;
+  }
+  .filters {
+    top: 3.6rem;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    margin-inline: calc(var(--gutter) * -1);
+    padding-inline: var(--gutter);
+    scrollbar-width: none;
+  }
+  .filters::-webkit-scrollbar {
+    display: none;
+  }
+  .filters button {
+    flex: none;
+  }
+  .project {
+    gap: 1rem;
+    padding-block: 2rem;
+  }
+  .project__photos {
+    column-gap: 0.5rem;
+  }
+  .project__photos li {
+    margin-bottom: 0.5rem;
+  }
+  .lightbox__bar {
+    font-size: 0.85rem;
+  }
+  .lightbox__bar > span {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .lightbox__nav button {
+    width: 2.75rem;
+    height: 2.75rem;
+  }
+  /* Na telefonie przybliża się dwoma palcami lub podwójnym stuknięciem. */
+  .zoom__controls {
+    display: none;
+  }
+  .zoom__stage {
+    inset: 0.25rem 0;
+  }
 }

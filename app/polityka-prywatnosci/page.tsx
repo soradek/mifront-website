@@ -26,7 +26,7 @@ export default function Privacy() {
       <h2>Twoje prawa</h2>
       <p>
         Możesz poprosić o dostęp do danych, ich poprawienie, usunięcie lub ograniczenie przetwarzania, a także wnieść
-        sprzeciw. Przysługuje ci skarga do Prezesa UODO.
+        sprzeciw. Przysługuje Ci skarga do Prezesa UODO.
       </p>
       <h2>Pliki cookies i statystyki</h2>
       <p>

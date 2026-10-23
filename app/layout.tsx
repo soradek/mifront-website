@@ -3,6 +3,8 @@ import { Barlow_Condensed, Hanken_Grotesk } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/next';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import MobileBar from '@/components/MobileBar';
+import Reveal from '@/components/Reveal';
 import { site } from '@/lib/site';
 import './globals.css';
 
@@ -62,12 +64,16 @@ const jsonLd = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="pl" className={`${display.variable} ${body.variable}`}>
+    <html lang="pl" suppressHydrationWarning className={`${display.variable} ${body.variable}`}>
       <body>
+        {/* Animacje przewijania ukrywają treść tylko, gdy działa JS. */}
+        <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} />
         <a className="skip" href="#tresc">Przejdź do treści</a>
         <Header />
         <main id="tresc">{children}</main>
         <Footer />
+        <MobileBar />
+        <Reveal />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
         <Analytics />
       </body>

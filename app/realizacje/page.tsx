@@ -18,7 +18,7 @@ export default function RealizacjePage() {
         <h1 className="section-title section-title--xl">Realizacje</h1>
         <p>
           {count} zdjęć z mieszkań i domów naszych klientów. Bez wizualizacji i stocków, tylko meble po montażu. Podoba
-          ci się któraś? Zadzwoń: <a href={site.phoneHref}>{site.phone}</a>.
+          Ci się któraś? Zadzwoń: <a href={site.phoneHref}>{site.phone}</a>.
         </p>
       </header>
       <Gallery projects={projects} categories={categories} />

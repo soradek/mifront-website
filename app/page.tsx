@@ -23,16 +23,15 @@ export default function Home() {
     <>
       <section className="hero">
         <div className="hero__text">
-          <p className="hero__kicker">Meble na wymiar · {site.owner}</p>
+          <p className="hero__kicker">MIFRONT · {site.owner}</p>
           <h1 className="hero__title">
-            Skrojone
-            <br />
-            na twoją
-            <br />
-            <span className="hero__accent">miarę.</span>
+            <span className="hero__line">Meble</span>
+            <span className="hero__line">skrojone</span>
+            <span className="hero__line hero__accent">na Twoją</span>
+            <span className="hero__line">miarę.</span>
           </h1>
           <p className="hero__lead">
-            Kuchnie, szafy przesuwne, garderoby i zabudowy, zaprojektowane pod twoje ściany, a nie pod katalog. Mierzymy,
+            Kuchnie, szafy przesuwne, garderoby i zabudowy, zaprojektowane pod Twoje ściany, a nie pod katalog. Mierzymy,
             projektujemy, wykonujemy i montujemy.
           </p>
           <div className="hero__actions">
@@ -62,7 +61,7 @@ export default function Home() {
       </section>
 
       <section className="offer" id="oferta" aria-labelledby="oferta-tytul">
-        <div className="offer__intro">
+        <div className="offer__intro" data-reveal>
           <h2 id="oferta-tytul" className="section-title">Co robimy</h2>
           <p>
             Każdy mebel powstaje pod konkretne wnętrze. Dlatego nie ma tu cennika z półki: najpierw pomiar, potem
@@ -71,7 +70,7 @@ export default function Home() {
         </div>
         <ol className="offer__list">
           {offer.map((item, i) => (
-            <li key={item.title}>
+            <li key={item.title} data-reveal style={{ '--d': `${i * 70}ms` } as React.CSSProperties}>
               <span className="offer__num">{String(i + 1).padStart(2, '0')}</span>
               <h3>{item.title}</h3>
               <p>{item.text}</p>
@@ -81,7 +80,7 @@ export default function Home() {
       </section>
 
       <section className="works" aria-labelledby="realizacje-tytul">
-        <div className="works__head">
+        <div className="works__head" data-reveal>
           <h2 id="realizacje-tytul" className="section-title">Z naszego warsztatu</h2>
           <Link href="/realizacje" className="link-arrow">
             Wszystkie realizacje <span aria-hidden="true">→</span>
@@ -89,7 +88,7 @@ export default function Home() {
         </div>
         <ul className="works__grid">
           {featured.map((p, i) => (
-            <li key={p.slug} className={`works__item works__item--${i + 1}`}>
+            <li key={p.slug} className={`works__item works__item--${i + 1}`} data-reveal="curtain" style={{ '--d': `${i * 90}ms` } as React.CSSProperties}>
               <Link href={`/realizacje#${p.slug}`}>
                 <Image
                   src={p.photos[0].src}
@@ -107,10 +106,10 @@ export default function Home() {
 
       <section className="process" aria-labelledby="proces-tytul">
         <div className="process__inner">
-          <h2 id="proces-tytul" className="section-title">Od pomiaru do montażu</h2>
-          <ol className="process__steps">
+          <h2 id="proces-tytul" className="section-title" data-reveal>Od pomiaru do montażu</h2>
+          <ol className="process__steps" data-reveal="line">
             {steps.map((s, i) => (
-              <li key={s.title}>
+              <li key={s.title} style={{ '--d': `${200 + i * 140}ms` } as React.CSSProperties}>
                 <span className="process__tick" aria-hidden="true" />
                 <span className="process__num">{i + 1}</span>
                 <h3>{s.title}</h3>
@@ -122,7 +121,7 @@ export default function Home() {
       </section>
 
       <section className="contact" id="kontakt" aria-labelledby="kontakt-tytul">
-        <div className="contact__direct">
+        <div className="contact__direct" data-reveal>
           <h2 id="kontakt-tytul" className="section-title">Umówmy pomiar</h2>
           <p>Najszybciej telefonicznie. Jeśli wolisz napisać, zostaw wiadomość, oddzwonimy.</p>
           <a href={site.phoneHref} className="contact__phone">
@@ -132,7 +131,9 @@ export default function Home() {
             {site.email}
           </a>
         </div>
-        <ContactForm />
+        <div data-reveal style={{ '--d': '120ms' } as React.CSSProperties}>
+          <ContactForm />
+        </div>
       </section>
     </>
   );
