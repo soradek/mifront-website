@@ -7,6 +7,11 @@ import type { Photo } from '@/data/realizacje';
 const MIN = 1;
 const MAX = 6;
 
+// Te same parametry co miniatury w galerii: ten sam adres obrazka, więc jest już w pamięci
+// przeglądarki i pokazuje się natychmiast, zanim dojdzie ostra wersja.
+export const THUMB_SIZES = '(max-width: 640px) 50vw, (max-width: 1100px) 33vw, 22vw';
+export const THUMB_QUALITY = 70;
+
 type View = { s: number; x: number; y: number };
 const FIT: View = { s: 1, x: 0, y: 0 };
 
@@ -23,6 +28,9 @@ export default function ZoomImage({ photo, onSwipe }: { photo: Photo; onSwipe: (
   }, []);
   const pointers = useRef(new Map<number, { x: number; y: number }>());
   const gesture = useRef<{ dist: number; s: number; startX: number; startY: number; moved: boolean } | null>(null);
+  const lastTap = useRef<{ t: number; x: number; y: number } | null>(null);
+  const lastPointerType = useRef('mouse');
+  const [sharp, setSharp] = useState(false);
 
   // Nie pozwala wyjechać zdjęciem poza kadr.
   const clamp = useCallback((v: View): View => {
@@ -51,7 +59,23 @@ export default function ZoomImage({ photo, onSwipe }: { photo: Photo; onSwipe: (
     [zoomAt],
   );
 
-  useEffect(() => setView(FIT), [photo.src, setView]);
+  useEffect(() => {
+    setView(FIT);
+    setSharp(false);
+  }, [photo.src, setView]);
+
+  // Safari na iOS ma własne gesty przybliżania strony: blokujemy je w kadrze.
+  useEffect(() => {
+    const el = stage.current;
+    if (!el) return;
+    const block = (e: Event) => e.preventDefault();
+    el.addEventListener('gesturestart', block);
+    el.addEventListener('gesturechange', block);
+    return () => {
+      el.removeEventListener('gesturestart', block);
+      el.removeEventListener('gesturechange', block);
+    };
+  }, []);
 
   useEffect(() => {
     const el = stage.current;
@@ -83,6 +107,7 @@ export default function ZoomImage({ photo, onSwipe }: { photo: Photo; onSwipe: (
   };
 
   const onPointerDown = (e: React.PointerEvent) => {
+    lastPointerType.current = e.pointerType;
     stage.current?.setPointerCapture(e.pointerId);
     const p = local(e);
     pointers.current.set(e.pointerId, p);
@@ -124,17 +149,38 @@ export default function ZoomImage({ photo, onSwipe }: { photo: Photo; onSwipe: (
       return;
     }
     gesture.current = null;
+    if (!g || e.pointerType === 'mouse') return;
+
     // Przesunięcie palcem w bok przy dopasowanym zdjęciu zmienia zdjęcie.
-    if (g && viewRef.current.s === 1 && e.pointerType !== 'mouse') {
+    if (viewRef.current.s === 1) {
       const dx = p.x - g.startX;
-      if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(p.y - g.startY)) onSwipe(dx < 0 ? 1 : -1);
+      if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(p.y - g.startY)) {
+        onSwipe(dx < 0 ? 1 : -1);
+        return;
+      }
+    }
+    // Podwójne stuknięcie liczymy sami: Safari na iOS nie zawsze zgłasza dblclick.
+    if (!g.moved) {
+      const now = Date.now();
+      const prev = lastTap.current;
+      if (prev && now - prev.t < 320 && Math.hypot(p.x - prev.x, p.y - prev.y) < 40) {
+        lastTap.current = null;
+        toggleZoom(p.x, p.y);
+      } else {
+        lastTap.current = { t: now, x: p.x, y: p.y };
+      }
     }
   };
 
-  const onDoubleClick = (e: React.MouseEvent) => {
-    const r = stage.current!.getBoundingClientRect();
+  const toggleZoom = (x: number, y: number) => {
     if (viewRef.current.s > 1) setView(FIT);
-    else zoomAt(2.5, e.clientX - r.left, e.clientY - r.top);
+    else zoomAt(2.5, x, y);
+  };
+
+  const onDoubleClick = (e: React.MouseEvent) => {
+    if (lastPointerType.current !== 'mouse') return;
+    const r = stage.current!.getBoundingClientRect();
+    toggleZoom(e.clientX - r.left, e.clientY - r.top);
   };
 
   const zoomed = view.s > 1;
@@ -154,7 +200,29 @@ export default function ZoomImage({ photo, onSwipe }: { photo: Photo; onSwipe: (
           className="zoom__layer"
           style={{ transform: `translate3d(${view.x}px, ${view.y}px, 0) scale(${view.s})` }}
         >
-          <Image key={photo.src} src={photo.src} alt={photo.alt} fill sizes="100vw" quality={80} loading="eager" draggable={false} />
+          <Image
+            key={`${photo.src}-thumb`}
+            src={photo.src}
+            alt=""
+            fill
+            sizes={THUMB_SIZES}
+            quality={THUMB_QUALITY}
+            loading="eager"
+            draggable={false}
+            className="zoom__thumb"
+          />
+          <Image
+            key={photo.src}
+            src={photo.src}
+            alt={photo.alt}
+            fill
+            sizes="100vw"
+            quality={80}
+            loading="eager"
+            draggable={false}
+            className={`zoom__sharp${sharp ? ' is-loaded' : ''}`}
+            onLoad={() => setSharp(true)}
+          />
         </div>
       </div>
       <div className="zoom__controls" role="group" aria-label="Powiększenie">

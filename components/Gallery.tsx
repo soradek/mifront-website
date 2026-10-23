@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
-import ZoomImage from '@/components/ZoomImage';
+import ZoomImage, { THUMB_QUALITY, THUMB_SIZES } from '@/components/ZoomImage';
 import type { Category, Photo, Project } from '@/data/realizacje';
 
 type Props = { projects: Project[]; categories: { id: Category; label: string }[] };
@@ -39,7 +39,23 @@ export default function Gallery({ projects, categories }: Props) {
     };
   }, [step]);
 
+  // Strona pod podglądem nie przewija się (iOS przewija ją mimo modalnego dialogu).
+  useEffect(() => {
+    if (!open) return;
+    const html = document.documentElement;
+    const prev = html.style.overflow;
+    html.style.overflow = 'hidden';
+    return () => {
+      html.style.overflow = prev;
+    };
+  }, [open]);
+
   const current: Photo | undefined = open?.project.photos[open.index];
+  const photos = open?.project.photos ?? [];
+  // Sąsiednie zdjęcia ładujemy z wyprzedzeniem, żeby przewijanie było płynne.
+  const neighbours = open && photos.length > 1
+    ? [...new Set([(open.index + 1) % photos.length, (open.index - 1 + photos.length) % photos.length])].map((i) => photos[i])
+    : [];
 
   return (
     <>
@@ -66,15 +82,15 @@ export default function Gallery({ projects, categories }: Props) {
             </div>
             <ul className="project__photos">
               {p.photos.map((ph, i) => (
-                <li key={ph.src} style={{ aspectRatio: `${ph.width} / ${ph.height}` }}>
+                <li key={ph.src}>
                   <button type="button" onClick={() => show(p, i)} aria-label={`Powiększ: ${ph.alt}`}>
                     <Image
                       src={ph.src}
                       alt={ph.alt}
                       width={ph.width}
                       height={ph.height}
-                      sizes="(max-width: 640px) 50vw, (max-width: 1100px) 33vw, 22vw"
-                      quality={70}
+                      sizes={THUMB_SIZES}
+                      quality={THUMB_QUALITY}
                       loading="lazy"
                     />
                   </button>
@@ -89,6 +105,11 @@ export default function Gallery({ projects, categories }: Props) {
         {open && current && (
           <>
             <ZoomImage photo={current} onSwipe={step} />
+            <div className="lightbox__preload" aria-hidden="true">
+              {neighbours.map((ph) => (
+                <Image key={ph.src} src={ph.src} alt="" fill sizes="100vw" quality={80} loading="eager" />
+              ))}
+            </div>
             <div className="lightbox__bar">
               <span>
                 {open.project.title} · {open.index + 1}/{open.project.photos.length}
