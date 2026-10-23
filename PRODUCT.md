@@ -12,6 +12,8 @@ Właściciele mieszkań i domów urządzający kuchnię, szafę, garderobę, ła
 ## Offer (ze starych materiałów firmy)
 Meble kuchenne na wymiar, meble pokojowe, garderoby, szafy przesuwne, meble łazienkowe, przedpokoje, wymiana okuć meblowych, serwis.
 Kontakt: tel. 696 020 841, info@mifront.pl.
+Firma (CEIDG): MIFRONT Mirosław Sobczak, ul. Staropoznańska 178, 88-100 Inowrocław, NIP 5561219454, REGON 381842382, od 2018 r.
+Facebook: https://www.facebook.com/profile.php?id=100054620192029. Brak publicznych opinii (stan 2026-10).
 
 ## Brand personality
 Rzemieślniczy, rzeczowy, precyzyjny. „Meble skrojone na twoją miarę”. Mówi jak stolarz przy pomiarze: konkretnie, bez marketingowych przymiotników.

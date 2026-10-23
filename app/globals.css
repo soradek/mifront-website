@@ -1354,3 +1354,127 @@ p {
     inset: 0.25rem 0;
   }
 }
+
+/* ---------- fakty ---------- */
+.facts {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 var(--gutter) clamp(3rem, 6vw, 4.5rem);
+}
+.facts__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  border-top: 1px solid var(--line);
+}
+.facts__list li {
+  padding: 1.5rem clamp(0.75rem, 2vw, 1.75rem) 0 0;
+  display: grid;
+  gap: 0.35rem;
+  align-content: start;
+}
+.facts__list li + li {
+  padding-left: clamp(0.75rem, 2vw, 1.75rem);
+  border-left: 1px solid var(--line);
+}
+.facts__list strong {
+  font-family: var(--f-display);
+  font-weight: 700;
+  font-size: clamp(1.6rem, 1.2rem + 1.4vw, 2.4rem);
+  line-height: 1;
+  text-transform: uppercase;
+}
+.facts__list span {
+  color: var(--ink-2);
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+@media (max-width: 860px) {
+  .facts__list {
+    grid-template-columns: 1fr 1fr;
+  }
+  .facts__list li:nth-child(3) {
+    padding-left: 0;
+    border-left: 0;
+  }
+  .facts__list li:nth-child(n + 3) {
+    margin-top: 1.25rem;
+    border-top: 1px solid var(--line);
+  }
+}
+
+/* ---------- FAQ ---------- */
+.faq {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: clamp(4rem, 9vw, 7rem) var(--gutter) 0;
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: 2rem clamp(2rem, 6vw, 6rem);
+  align-items: start;
+}
+.faq__list {
+  border-top: 1px solid var(--line);
+}
+.faq details {
+  border-bottom: 1px solid var(--line);
+}
+.faq summary {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.25rem 0;
+  font-weight: 600;
+  font-size: clamp(1.05rem, 1rem + 0.3vw, 1.2rem);
+}
+.faq summary::-webkit-details-marker {
+  display: none;
+}
+.faq summary::after {
+  content: '+';
+  flex: none;
+  width: 2rem;
+  height: 2rem;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--ink-2);
+  font-weight: 400;
+  font-size: 1.2rem;
+  transition: transform 0.3s var(--ease), background-color 0.3s var(--ease);
+}
+.faq details[open] summary::after {
+  transform: rotate(45deg);
+  background: var(--teal);
+  border-color: var(--teal);
+}
+.faq details p {
+  padding: 0 3.5rem 1.4rem 0;
+  color: var(--ink-2);
+  max-width: 62ch;
+}
+@media (max-width: 860px) {
+  .faq {
+    grid-template-columns: 1fr;
+  }
+  .faq details p {
+    padding-right: 0;
+  }
+}
+
+/* ---------- adres w kontakcie ---------- */
+.contact__address {
+  margin-top: 2rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--line);
+  font-style: normal;
+  color: var(--ink-2);
+  line-height: 1.7;
+}
+.footer__legal {
+  line-height: 1.7;
+}

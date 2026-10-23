@@ -3,7 +3,7 @@ import Link from 'next/link';
 import Measure from '@/components/Measure';
 import ContactForm from '@/components/ContactForm';
 import { PhoneIcon } from '@/components/Header';
-import { offer, site, steps } from '@/lib/site';
+import { faq, offer, site, steps } from '@/lib/site';
 import { projects } from '@/data/realizacje';
 
 const featuredSlugs = [
@@ -18,12 +18,18 @@ export default function Home() {
   const featured = featuredSlugs
     .map((slug) => projects.find((p) => p.slug === slug))
     .filter((p): p is (typeof projects)[number] => Boolean(p));
+  const photoCount = projects.reduce((n, p) => n + p.photos.length, 0);
+  const faqLd = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+  };
 
   return (
     <>
       <section className="hero">
         <div className="hero__text">
-          <p className="hero__kicker">MIFRONT · {site.owner}</p>
+          <p className="hero__kicker">Meble na wymiar · Inowrocław</p>
           <h1 className="hero__title">
             <span className="hero__line">Meble</span>
             <span className="hero__line">skrojone</span>
@@ -31,8 +37,8 @@ export default function Home() {
             <span className="hero__line">miarę.</span>
           </h1>
           <p className="hero__lead">
-            Kuchnie, szafy przesuwne, garderoby i zabudowy, zaprojektowane pod Twoje ściany, a nie pod katalog. Mierzymy,
-            projektujemy, wykonujemy i montujemy.
+            Kuchnie, szafy przesuwne, garderoby i zabudowy, zaprojektowane pod Twoje ściany, a nie pod katalog. Pracownia
+            w Inowrocławiu: mierzymy, projektujemy, wykonujemy i montujemy.
           </p>
           <div className="hero__actions">
             <a href={site.phoneHref} className="btn btn--primary">
@@ -58,6 +64,29 @@ export default function Home() {
           </div>
           <Measure label="co do centymetra" />
         </figure>
+      </section>
+
+      <section className="facts" aria-label="O firmie w skrócie">
+        <ul className="facts__list">
+          <li data-reveal>
+            <strong>Od {site.since}</strong>
+            <span>robimy meble na wymiar</span>
+          </li>
+          <li data-reveal style={{ '--d': '80ms' } as React.CSSProperties}>
+            <strong>Inowrocław</strong>
+            <span>własna pracownia, {site.address.street}</span>
+          </li>
+          <li data-reveal style={{ '--d': '160ms' } as React.CSSProperties}>
+            <strong>Jeden wykonawca</strong>
+            <span>pomiar, projekt, produkcja i montaż</span>
+          </li>
+          <li data-reveal style={{ '--d': '240ms' } as React.CSSProperties}>
+            <strong>{photoCount} zdjęć</strong>
+            <span>
+              <Link href="/realizacje">prawdziwych realizacji</Link>, bez wizualizacji
+            </span>
+          </li>
+        </ul>
       </section>
 
       <section className="offer" id="oferta" aria-labelledby="oferta-tytul">
@@ -120,6 +149,21 @@ export default function Home() {
         </div>
       </section>
 
+      <section className="faq" aria-labelledby="faq-tytul">
+        <h2 id="faq-tytul" className="section-title" data-reveal>
+          Częste pytania
+        </h2>
+        <div className="faq__list">
+          {faq.map((f, i) => (
+            <details key={f.q} data-reveal style={{ '--d': `${i * 60}ms` } as React.CSSProperties}>
+              <summary>{f.q}</summary>
+              <p>{f.a}</p>
+            </details>
+          ))}
+        </div>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
+      </section>
+
       <section className="contact" id="kontakt" aria-labelledby="kontakt-tytul">
         <div className="contact__direct" data-reveal>
           <h2 id="kontakt-tytul" className="section-title">Umówmy pomiar</h2>
@@ -130,6 +174,19 @@ export default function Home() {
           <a href={`mailto:${site.email}`} className="contact__mail">
             {site.email}
           </a>
+          <address className="contact__address">
+            {site.legalName}
+            <br />
+            {site.address.street}, {site.address.postalCode} {site.address.city}
+            <br />
+            <a href={site.mapsUrl} target="_blank" rel="noopener noreferrer">
+              Pokaż na mapie
+            </a>
+            {' · '}
+            <a href={site.facebook} target="_blank" rel="noopener noreferrer">
+              Facebook
+            </a>
+          </address>
         </div>
         <div data-reveal style={{ '--d': '120ms' } as React.CSSProperties}>
           <ContactForm />

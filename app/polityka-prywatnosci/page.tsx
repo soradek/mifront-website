@@ -12,7 +12,8 @@ export default function Privacy() {
       <h1 className="section-title section-title--xl">Polityka prywatności</h1>
       <h2>Administrator danych</h2>
       <p>
-        Administratorem danych przekazanych przez formularz lub e-mail jest MIFRONT, {site.owner}, kontakt:{' '}
+        Administratorem danych przekazanych przez formularz lub e-mail jest {site.legalName}, {site.address.street},{' '}
+        {site.address.postalCode} {site.address.city}, NIP {site.nip}, REGON {site.regon}. Kontakt:{' '}
         <a href={`mailto:${site.email}`}>{site.email}</a>, tel. {site.phone}.
       </p>
       <h2>Jakie dane i po co</h2>

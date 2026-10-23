@@ -4,9 +4,9 @@ import { categories, projects } from '@/data/realizacje';
 import { site } from '@/lib/site';
 
 export const metadata: Metadata = {
-  title: 'Realizacje: kuchnie, szafy i garderoby na wymiar',
+  title: 'Realizacje: kuchnie, szafy i garderoby na wymiar, Inowrocław',
   description:
-    'Zdjęcia mebli na wymiar wykonanych przez MIFRONT: kuchnie, szafy przesuwne, garderoby, łazienki, przedpokoje i meble pokojowe.',
+    'Zdjęcia mebli na wymiar wykonanych przez MIFRONT z Inowrocławia: kuchnie, szafy przesuwne, garderoby, łazienki, przedpokoje i meble pokojowe.',
   alternates: { canonical: '/realizacje' },
 };
 

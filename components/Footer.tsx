@@ -6,7 +6,7 @@ export default function Footer() {
   return (
     <footer className="footer">
       <div className="footer__inner">
-        <Image src="/mifront-logo-jasne.png" alt="MIFRONT. Meble skrojone na twoją miarę" width={1200} height={217} sizes="260px" className="footer__logo" />
+        <Image src="/mifront-logo-jasne.png" alt="MIFRONT. Meble skrojone na Twoją miarę" width={1200} height={217} sizes="260px" className="footer__logo" />
         <dl className="footer__contact">
           <div>
             <dt>Telefon</dt>
@@ -17,12 +17,27 @@ export default function Footer() {
             <dd><a href={`mailto:${site.email}`}>{site.email}</a></dd>
           </div>
           <div>
-            <dt>Właściciel</dt>
-            <dd>{site.owner}</dd>
+            <dt>Pracownia</dt>
+            <dd>
+              <a href={site.mapsUrl} target="_blank" rel="noopener noreferrer">
+                {site.address.street}
+                <br />
+                {site.address.postalCode} {site.address.city}
+              </a>
+            </dd>
+          </div>
+          <div>
+            <dt>Facebook</dt>
+            <dd>
+              <a href={site.facebook} target="_blank" rel="noopener noreferrer">
+                MIFRONT na Facebooku
+              </a>
+            </dd>
           </div>
         </dl>
         <p className="footer__legal">
-          © {new Date().getFullYear()} MIFRONT · <Link href="/polityka-prywatnosci">Polityka prywatności</Link>
+          © {new Date().getFullYear()} {site.legalName} · NIP {site.nip} · REGON {site.regon} ·{' '}
+          <Link href="/polityka-prywatnosci">Polityka prywatności</Link>
         </p>
       </div>
     </footer>
