@@ -36,7 +36,7 @@ export default function Home() {
             <span className="hero__line">miarę.</span>
           </h1>
           <p className="hero__lead">
-            Kuchnie, szafy przesuwne, garderoby i zabudowy, zaprojektowane pod Twoje ściany, a nie pod katalog. Pracownia
+            Kuchnie, szafy przesuwne, garderoby i zabudowy, zaprojektowane dokładnie tak, jak chcesz. Pracownia
             w Inowrocławiu: mierzymy, projektujemy, wykonujemy i montujemy.
           </p>
           <div className="hero__actions">
